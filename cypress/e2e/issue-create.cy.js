@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 describe('Issue create', () => {
   beforeEach(() => {
     cy.visit('/');
@@ -55,14 +56,82 @@ describe('Issue create', () => {
     });
   });
 
-  it('Should validate title is required field if missing', () => {
+  it('Create new issue and validate it', () => {
+    cy.get('[data-testid="modal:issue-create"]').within(() => {
+      // Insert description and title of the issue
+      cy.get('.ql-editor').type('My bug description');
+      cy.get('input[name="title"]').type('Bug');
+      // Select type and priority of the issue
+      cy.get('[data-testid="select:type"]').click();
+      cy.get('[data-testid="select-option:Bug"]').trigger('click');
+      cy.get('[data-testid="select:priority"]').click();
+      cy.get('[data-testid="select-option:Highest"]').trigger('click');
+      // Select reporter and sumit the issue
+      cy.get('[data-testid="form-field:reporterId"]').click();
+      cy.get('[data-testid="select-option:Pickle Rick"]').click();
+      cy.get('button[type="submit"]').click();
+      
+      cy.get('[data-testid="modal:issue-create"]').should('not.exist');
+      
+    })
+    // Assert that success message is visible
+    cy.contains('Issue has been successfully created.').should('be.visible');
+    cy.get('[data-testid="board-list:backlog').should('be.visible').and('have.length', '1').within(() => {
+      cy.get('[data-testid="list-issue"]')
+          .should('have.length', '5')
+          .first()
+          .find('p')
+          .contains('Bug');
+      //Assert that correct type icon are visible
+      cy.get('[data-testid="icon:bug"]').should('be.visible');
+
+    })
+  });
+
+  const title = faker.lorem.word();
+  const randomDescription = faker.lorem.words(5);
+
+  it('Creating new issue using random data plugin', () => {
+    cy.get('[data-testid="modal:issue-create"]').within(() => {
+      // Assert that issue type 'Task' set by default is visible
+      cy.get('[data-testid="select:type"]').should('have.text', 'Task').should('be.visible');
+      // Fill out random description and issue title fields
+      cy.get('.ql-editor').type(randomDescription);
+      cy.get('input[name="title"]').type(title);
+      // Select priority of the issue 'Low'
+      cy.get('[data-testid="select:priority"]').click();
+      cy.get('[data-testid="select-option:Low"]').trigger('click');
+      // Select reporter 'Baby Yoda' and click 'Create issue' button
+      cy.get('[data-testid="form-field:reporterId"]').click();
+      cy.get('[data-testid="select-option:Baby Yoda"]').click();
+      cy.get('button[type="submit"]').click();
+
+      cy.get('[data-testid="modal:issue-create"]').should('not.exist');
+    })
+    // Assert that success message is visible
+    cy.contains('Issue has been successfully created.').should('be.visible');
+      // Assert that issue is created and visible in the backlog
+    cy.get('[data-testid="board-list:backlog').should('be.visible').and('have.length', '1').within(() => {
+      cy.get('[data-testid="list-issue"]')
+          .should('have.length', '5')
+          .first()
+          .find('p')
+          .contains(title);
+      cy.get('[data-testid="icon:task"]').should('be.visible');
+    })
+  })
+
+  it('User cannot submit the issue when required fields are missing', () => {
     //System finds modal for creating issue and does next steps inside of it
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       //Try to click create issue button without filling any data
-      cy.get('button[type="submit"]').click();
+      cy.get('button[type="submit"]')
+        .scrollIntoView().
+        should('be.visible').click();
 
       //Assert that correct error message is visible
-      cy.get('[data-testid="form-field:title"]').should('contain', 'This field is required');
-    });
-  });
-});
+      cy.get('[data-testid="form-field:title"]').should('contain', 'This field is required')
+        .should('be.visible');
+    })
+  })
+})
