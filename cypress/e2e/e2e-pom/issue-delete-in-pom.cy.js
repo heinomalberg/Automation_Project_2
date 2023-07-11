@@ -1,6 +1,3 @@
-/**
- * This is an example file and approach for POM in Cypress
- */
 import IssueModal from "../../pages/IssueModal";
 
 describe('Issue delete', () => {
@@ -16,10 +13,19 @@ describe('Issue delete', () => {
   const issueTitle = 'This is an issue of type: Task.';
 
   it('Should delete issue successfully', () => {
-    //add steps to delete issue
+    //Next two steps for delete issue and confirm deletion
+    IssueModal.clickDeleteButton(issueTitle);
+    IssueModal.confirmDeletion();
   });
 
+
   it('Should cancel deletion process successfully', () => {
-    //add steps to start deletion proces but cancel it
+    /** 1. step is to start deletion proces
+     * 2. step to cancel deletion
+     * 3. step to close issue detail modal
+    */
+    IssueModal.clickDeleteButton(issueTitle);
+    IssueModal.cancelDeletion();
+    IssueModal.closeDetailModal();
   });
 });
