@@ -14,8 +14,10 @@ describe('Issue delete', () => {
 
   it('Should delete issue successfully', () => {
     //Next two steps for delete issue and confirm deletion
-    IssueModal.clickDeleteButton(issueTitle);
+    IssueModal.clickDeleteButton();
     IssueModal.confirmDeletion();
+    // Assert that issue is not visible on the board
+    IssueModal.ensureIssueIsNotVisibleOnBoard(issueTitle)
   });
 
 
@@ -24,8 +26,10 @@ describe('Issue delete', () => {
      * 2. step to cancel deletion
      * 3. step to close issue detail modal
     */
-    IssueModal.clickDeleteButton(issueTitle);
+    IssueModal.clickDeleteButton();
     IssueModal.cancelDeletion();
     IssueModal.closeDetailModal();
+    // Assert that the issue is visible on the board
+    IssueModal.ensureIssueIsVisibleOnBoard(issueTitle)
   });
 });
