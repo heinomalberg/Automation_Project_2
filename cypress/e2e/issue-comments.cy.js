@@ -27,6 +27,7 @@ describe('Issue comments creating, editing and deleting', () => {
         });
     });
 
+<<<<<<< HEAD
     it('Should create,edit and delete comment successfully', () => {
         const comment = 'TEST_COMMENT';
         const comment_edited = 'TEST_COMMENT_EDITED';
@@ -58,6 +59,8 @@ describe('Issue comments creating, editing and deleting', () => {
 
     });
 
+=======
+>>>>>>> 00dfed8746cacccb668c2b53aad51d166902bfb6
     it('Should edit a comment successfully', () => {
         const previousComment = 'An old silent pond...';
         const comment = 'TEST_COMMENT_EDITED';
