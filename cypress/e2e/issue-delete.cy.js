@@ -15,9 +15,9 @@ describe('Deleting created Issue', () => {
     cy.get('button').contains('Delete issue').click();
     cy.get('[data-testid="modal:confirm"]').should('not.exist');
     // Assert that the issue is deleted and not visible in the backlog list
-    cy.get('[data-testid="board-list:backlog').should('be.visible')
+    cy.get('[data-testid="board-list:backlog').should('be.visible');
     cy.get('[data-testid="board-list:backlog"]').contains('This is an issue of type: Task.')
-    .should('not.exist');
+      .should('not.exist');
   })
 
   it('Should be possible to start deleting an issue and cancel deletion', () => {
@@ -31,6 +31,6 @@ describe('Deleting created Issue', () => {
     cy.get('[data-testid="icon:close"]').should('be.visible').first().click();
     // Assert that the issue is not deleted and visible in the backlog list
     cy.get('[data-testid="board-list:backlog').contains('This is an issue of type: Task.')
-    .should('be.visible');   
+      .should('be.visible');
   });
 })
