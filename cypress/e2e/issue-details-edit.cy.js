@@ -62,4 +62,25 @@ describe('Issue details editing', () => {
   });
 
   const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
+  const expectedLength = 5;
+  let priorityValuesArray = [];
+
+  it.only('Validates values in issue priorities', () => {
+    getIssueDetailsModal().within(() => {
+      cy.get('[data-testid="select:priority"]').click('bottomRight');
+      cy.get('[data-testid="priority-dropdown"]').should('be.visible')
+      .each((option, index) => {
+        const priorityValue = option.text().trim();
+        if (index === 0) {
+          priorityValuesArray.push(priorityValue);
+        }
+        priorityValuesArray.push(priorityValue);
+        cy.log('Added value: ${priorityValue}. Array length: ${priorityValuesArray.length}');
+      }).then(() => {
+        expect(priorityValuesArray.length).to.equal(expectedLength);
+        const expectedValues = ['Lowest', 'Low', 'Medium', 'High', 'Highest'];
+        expect(priorityValuesArray).to.deep.equal(expectedValues);
+      })
+    })
+  });
 });

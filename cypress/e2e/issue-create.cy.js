@@ -130,15 +130,7 @@ describe('Issue create', () => {
         should('be.visible').click();
 
       //Assert that correct error message is visible
-<<<<<<< HEAD
-      cy.get('[data-testid="form-field:title"]').should('contain', 'This field is required')
-        .should('be.visible');
-    })
-  })
-})
-=======
       cy.get('[data-testid="form-field:title"]').should('contain', 'This field is required');
     });
   });
 });
->>>>>>> 00dfed8746cacccb668c2b53aad51d166902bfb6
