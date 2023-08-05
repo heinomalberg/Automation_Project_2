@@ -133,4 +133,39 @@ describe('Issue create', () => {
       cy.get('[data-testid="form-field:title"]').should('contain', 'This field is required');
     });
   });
+
+  // Task 3
+
+  it.only('Should validate issue title format on the board', () => {
+    const title = 'Summer Issue';
+    const newTitle = '   Hello   World   ';
+
+    cy.get('[data-testid="modal:issue-create"]').within(() => {
+      // Insert description and title of the issue
+      cy.get('.ql-editor').type('My bug description');
+      cy.get('input[name="title"]').type(title);
+      // Select type and priority of the issue
+      cy.get('[data-testid="select:type"]').click();
+      cy.get('[data-testid="select-option:Bug"]').trigger('click');
+      cy.get('[data-testid="select:priority"]').click();
+      cy.get('[data-testid="select-option:Highest"]').trigger('click');
+      // Select reporter and sumit the issue
+      cy.get('[data-testid="form-field:reporterId"]').click();
+      cy.get('[data-testid="select-option:Pickle Rick"]').click();
+      cy.get('button[type="submit"]').click();
+      
+      cy.get('[data-testid="modal:issue-create"]').should('not.exist');
+    });
+    cy.contains('Issue has been successfully created.').should('be.visible');
+    cy.get('[data-testid="board-list:backlog').should('be.visible').contains(title).click();
+    cy.get('[placeholder="Short summary"]').clear().type(newTitle).invoke('text')
+      
+      const trimmedTitle = newTitle.trim();
+      cy.get('[data-testid="modal:issue-create"]').contains(trimmedTitle);
+      //.then(issueTitle => {
+        //const trimmedTitle = newTitle.trim();
+        //cy.log(`Issue Title: "${issueTitle}", Trimmed Title: "${trimmedTitle}"`);
+        //expect(newTitle).to.equal(trimmedTitle);
+      //});
+  });
 });

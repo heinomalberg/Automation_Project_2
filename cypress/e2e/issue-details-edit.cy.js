@@ -61,14 +61,18 @@ describe('Issue details editing', () => {
     });
   });
 
+  // Task 1 (not completed)
+
   const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
   const expectedLength = 5;
   let priorityValuesArray = [];
 
-  it.only('Validates values in issue priorities', () => {
+  it('Validates values in issue priorities', () => {
     getIssueDetailsModal().within(() => {
+      cy.contains('High');
       cy.get('[data-testid="select:priority"]').click('bottomRight');
-      cy.get('[data-testid="priority-dropdown"]').should('be.visible')
+      cy.get('[data-testid="option-selected"]').should('be.visible');
+      cy.get('[data-testid="select-option:Highest"]')
       .each((option, index) => {
         const priorityValue = option.text().trim();
         if (index === 0) {
@@ -83,4 +87,36 @@ describe('Issue details editing', () => {
       })
     })
   });
+
+  // Task 2.1
+
+  it('Should validate reporter name format', () => {
+    cy.get('[data-testid="select:reporter"]').invoke('text').then(reporterName => {
+      // Use string methods to check if reporter name contains only characters
+      // and allow spaces inside of the string
+      const isOnlyCharacters = /^[A-Za-z ]*$/.test(reporterName.trim());
+      // Log the reporter name and the validation result for debugging
+      cy.log(`Reporter Name: "${reporterName}", Contains Only Characters: ${isOnlyCharacters}`);
+      // Assert that reporter name contains only characters
+      expect(isOnlyCharacters).to.be.true;
+    })
+  });
+
+  // Task 2.2
+
+  it('Should validate reporter name format without spaces', () => {
+    cy.get('[data-testid="select:reporter"]').invoke('text').then(reporterName => {
+      // Remove all spaces from the reporter name
+      const reporterNameWithoutSpaces = reporterName.replace(/\s/g, '');
+      // Use string method to check if reporter name contains only characters
+      const isOnlyCharacters = /^[A-Za-z]*$/.test(reporterNameWithoutSpaces);
+      // Log the reporter name and the validation result for debugging
+      cy.log(`Reporter Name: "${reporterName}", Contains Only Characters: ${isOnlyCharacters}`);
+      // Assert that reporter name contains only characters
+      expect(isOnlyCharacters).to.be.true;
+    })
+  });
+
+  // Task 3 (not completed)
+
 });
